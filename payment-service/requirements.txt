@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+pymongo>=4.10
+beanie>=1.24.0
+python-dotenv
+web3
+redis
