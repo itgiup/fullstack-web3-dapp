@@ -67,3 +67,10 @@ export default tseslint.config([
   },
 ])
 ```
+
+instal dependencies
+```bash
+yarn add @ant-design/pro-components @apollo/client @wagmi/core antd graphql react react-dom react-router-dom viem
+yarn add -D @eslint/js @graphql-codegen/cli @graphql-codegen/typescript @graphql-codegen/typescript-react-apollo @types/react @types/react-dom @vitejs/plugin-react eslint eslint-plugin-react-hooks eslint-plugin-react-refresh globals typescript typescript-eslint vite 
+
+```
