@@ -48,6 +48,7 @@ export default function Register() {
       style={{ 
         width: '100%', 
         maxWidth: 500,
+        margin: 'auto',
       }}
       variant="borderless"
     >

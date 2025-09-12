@@ -1,16 +1,19 @@
-import React from 'react';
-import { Layout, Menu, Dropdown, Avatar, Space, Button, Switch } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Menu, Dropdown, Avatar, Space, Button, Switch, Typography, Grid, Drawer } from 'antd';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { UserOutlined, LogoutOutlined, SunOutlined, MoonOutlined, GlobalOutlined, DownOutlined } from '@ant-design/icons';
+import { UserRole } from '../types/auth';
+import { UserOutlined, LogoutOutlined, SunOutlined, MoonOutlined, GlobalOutlined, DownOutlined, MenuOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { config } from '../utils/config';
 
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
 
 interface AppLayoutProps {
-    darkTheme: boolean;
-    setDarkTheme: (dark: boolean) => void;
+  darkTheme: boolean;
+  setDarkTheme: (dark: boolean) => void;
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ darkTheme, setDarkTheme }) => {
@@ -18,6 +21,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({ darkTheme, setDarkTheme }) => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
   const { t, i18n } = useTranslation();
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+  const isMobile = !screens.md;
 
   const handleLogout = () => {
     logout();
@@ -30,6 +38,14 @@ const AppLayout: React.FC<AppLayoutProps> = ({ darkTheme, setDarkTheme }) => {
 
   const handleLanguageChange: MenuProps['onClick'] = ({ key }) => {
     i18n.changeLanguage(key);
+  };
+
+  const showDrawer = () => {
+    setDrawerVisible(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawerVisible(false);
   };
 
   const languageMenuItems: MenuProps['items'] = [
@@ -71,37 +87,62 @@ const AppLayout: React.FC<AppLayoutProps> = ({ darkTheme, setDarkTheme }) => {
       </Link>
     );
   };
-  
-  const canViewDashboard = user?.role === 'admin' || user?.role === 'moderator';
+
+  const canViewDashboard = user?.role === UserRole.ADMIN || user?.role === UserRole.MODERATOR;
 
   const mainMenuItems: MenuProps['items'] = [
     {
       key: '/',
       label: <Link to="/">Home</Link>,
     },
-    canViewDashboard && {
-      key: '/dashboard',
-      label: <Link to="/dashboard">Dashboard</Link>,
-    },
-  ].filter(Boolean); // Filter out false/null values if canViewDashboard is false
+    ...(canViewDashboard
+      ? [
+        {
+          key: '/dashboard',
+          label: <Link to="/dashboard">Dashboard</Link>,
+        },
+      ]
+      : []),
+  ];
+
+  const menuInDrawer = (
+    <Menu
+      theme={darkTheme ? 'dark' : 'light'}
+      mode="inline"
+      selectedKeys={[location.pathname]}
+      items={mainMenuItems}
+      onClick={closeDrawer} // Close drawer when a menu item is clicked
+    />
+  );
+
+  const menuInHeader = (
+    <Menu
+      theme={darkTheme ? 'dark' : 'light'}
+      mode="horizontal"
+      selectedKeys={[location.pathname]}
+      style={{ flex: 1, borderBottom: 'none', background: 'transparent' }}
+      items={mainMenuItems}
+    />
+  );
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', background: darkTheme ? '#001529' : '#fff' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+          {isMobile && (
+            <Button
+              type="text"
+              icon={<MenuOutlined style={{ color: darkTheme ? 'white' : 'black' }} />}
+              onClick={showDrawer}
+              style={{ marginRight: '16px' }}
+            />
+          )}
           <div className="logo" style={{ color: darkTheme ? 'white' : 'black', fontSize: '24px', marginRight: '24px' }}>
-            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Web3 DApp</Link>
+            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}><Text>{config.APP_NAME}</Text></Link>
           </div>
-          <Menu
-            theme={darkTheme ? 'dark' : 'light'}
-            mode="horizontal"
-            selectedKeys={[location.pathname]}
-            style={{ flex: 1, borderBottom: 'none', background: 'transparent' }}
-            items={mainMenuItems} // Use the items prop
-          >
-            {/* No children here */}
-          </Menu>
+          {!isMobile && menuInHeader}
         </div>
+
         <Space size="middle">
           <Switch
             checked={darkTheme}
@@ -113,7 +154,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ darkTheme, setDarkTheme }) => {
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 <GlobalOutlined style={{ color: darkTheme ? 'white' : 'black' }} />
-                <span style={{ color: darkTheme ? 'white' : 'black' }}>{t('language')}</span>
                 <DownOutlined style={{ color: darkTheme ? 'white' : 'black' }} />
               </Space>
             </a>
@@ -121,15 +161,21 @@ const AppLayout: React.FC<AppLayoutProps> = ({ darkTheme, setDarkTheme }) => {
           {renderUserControls()}
         </Space>
       </Header>
-      <Content style={{ 
-        padding: '24px', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        flexGrow: 1 
-      }}>
+
+      <Drawer
+        title={config.APP_NAME}
+        placement="left"
+        onClose={closeDrawer}
+        open={drawerVisible}
+        styles={{ body: { padding: 0 } }}
+      >
+        {menuInDrawer}
+      </Drawer>
+
+      <Content style={{ verticalAlign: 'middle' }}>
         <Outlet />
       </Content>
+
       <Footer style={{ textAlign: 'center' }}>
         Web3 DApp ©2025 @itgiup
       </Footer>

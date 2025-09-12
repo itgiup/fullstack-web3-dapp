@@ -7,7 +7,7 @@ services:
       - "3443:443"   # External port 3443, internal port 443
     depends_on:
       - gateway
-      - frontend
+      # - frontend
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
@@ -97,10 +97,10 @@ services:
     # No ports exposed - only internal communication
 
   # Frontend
-  frontend:
-    build: ./frontend
-    networks:
-      - app-network
+  # frontend:
+  #   build: ./frontend
+  #   networks:
+  #     - app-network
     # No ports exposed - served through nginx
 
   # Database Services

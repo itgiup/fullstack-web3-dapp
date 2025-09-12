@@ -1,9 +1,8 @@
 import React from 'react';
-import { Card, Typography, Descriptions, Spin } from 'antd';
+import { Card, Descriptions, Spin } from 'antd';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 
-const { Title } = Typography;
 
 const Profile: React.FC = () => {
   const { user, loading } = useAuth();

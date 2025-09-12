@@ -70,7 +70,8 @@ export default tseslint.config([
 
 instal dependencies
 ```bash
-yarn add @ant-design/pro-components @apollo/client @wagmi/core antd graphql react react-dom react-router-dom viem
-yarn add -D @eslint/js @graphql-codegen/cli @graphql-codegen/typescript @graphql-codegen/typescript-react-apollo @types/react @types/react-dom @vitejs/plugin-react eslint eslint-plugin-react-hooks eslint-plugin-react-refresh globals typescript typescript-eslint vite 
+yarn add react-router-dom antd @ant-design/pro-components @apollo/client graphql 
+wagmi viem@2.x @tanstack/react-query
+yarn add -D globals typescript eslint eslint-plugin-react-hooks eslint-plugin-react-refresh typescript-eslint vite @eslint/js @types/react @types/react-dom @vitejs/plugin-react @graphql-codegen/cli @graphql-codegen/typescript @graphql-codegen/typescript-react-apollo 
 
 ```

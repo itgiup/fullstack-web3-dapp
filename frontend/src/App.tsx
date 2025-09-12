@@ -11,6 +11,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ConfigProvider, theme } from 'antd';
 import { ApolloProvider } from '@apollo/client';
 import Profile from './pages/Profile';
+import { UserRole } from './types/auth';
+import "./App.css"
 
 function App() {
   const [darkTheme, setDarkTheme] = useState(() => {
@@ -57,7 +59,7 @@ function App() {
                 <Route 
                   path="/dashboard" 
                   element={
-                    <ProtectedRoute requiredRole={['admin', 'moderator']}>
+                    <ProtectedRoute requiredRole={[UserRole.ADMIN, UserRole.MODERATOR]}>
                       <Dashboard />
                     </ProtectedRoute>
                   } 

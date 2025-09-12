@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
-import { message } from 'antd';
+import { message as notification } from 'antd';
 import type {
   AuthState,
   AuthContextType,
@@ -289,17 +289,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (result.success && result.tokens && result.user) {
         storeAuth(result.user, result.tokens);
-        message.success(result.message);
+        notification.success(result.message);
         return result;
       } else {
         dispatch({ type: 'LOGIN_ERROR', payload: result.message });
-        message.error(result.message);
+        notification.error(result.message);
         return result;
       }
     } catch {
       const errorMessage = 'Login failed. Please try again.';
       dispatch({ type: 'LOGIN_ERROR', payload: errorMessage });
-      message.error(errorMessage);
+      notification.error(errorMessage);
       return { success: false, message: errorMessage };
     }
   };
@@ -332,17 +332,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         } else {
           dispatch({ type: 'SET_LOADING', payload: false });
         }
-        message.success(result.message);
+        notification.success(result.message);
         return result;
       } else {
         dispatch({ type: 'LOGIN_ERROR', payload: result.message });
-        message.error(result.message);
+        notification.error(result.message);
         return result;
       }
     } catch {
       const errorMessage = 'Registration failed. Please try again.';
       dispatch({ type: 'LOGIN_ERROR', payload: errorMessage });
-      message.error(errorMessage);
+      notification.error(errorMessage);
       return { success: false, message: errorMessage };
     }
   };
@@ -366,17 +366,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (result.success && result.tokens && result.user) {
         storeAuth(result.user, result.tokens);
-        message.success(result.message);
+        notification.success(result.message);
         return result;
       } else {
         dispatch({ type: 'LOGIN_ERROR', payload: result.message });
-        message.error(result.message);
+        notification.error(result.message);
         return result;
       }
     } catch {
       const errorMessage = 'Wallet login failed. Please try again.';
       dispatch({ type: 'LOGIN_ERROR', payload: errorMessage });
-      message.error(errorMessage);
+      notification.error(errorMessage);
       return { success: false, message: errorMessage };
     }
   };
@@ -389,7 +389,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('Logout mutation failed:', error);
     } finally {
       clearAuth();
-      message.success('Logged out successfully');
+      notification.success('Logged out successfully');
     }
   };
 

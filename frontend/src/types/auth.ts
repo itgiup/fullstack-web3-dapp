@@ -19,24 +19,27 @@ export interface WalletAddress {
   createdAt: string;
 }
 
-export enum UserRole {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-  MODERATOR = 'MODERATOR',
-}
+export const UserRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+  MODERATOR: 'MODERATOR',
+} as const;
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
-export enum UserStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  BANNED = 'BANNED',
-  PENDING = 'PENDING',
-}
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  BANNED: 'BANNED',
+  PENDING: 'PENDING',
+} as const;
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
 
-export enum LoginMethod {
-  EMAIL = 'EMAIL',
-  USERNAME = 'USERNAME',
-  WALLET = 'WALLET',
-}
+export const LoginMethod = {
+  EMAIL: 'EMAIL',
+  USERNAME: 'USERNAME',
+  WALLET: 'WALLET',
+} as const;
+export type LoginMethod = (typeof LoginMethod)[keyof typeof LoginMethod];
 
 export interface TokenPair {
   accessToken: string;
